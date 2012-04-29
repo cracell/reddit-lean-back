@@ -1,6 +1,6 @@
 foo = '';
 result = '';
-var subreddit = '', limit = 30;
+var subreddit = '', limit = 30, hideNSFW = "true";
   $(function() {
     $("a[href='options']").click(function(e) {
       e.preventDefault();
@@ -23,7 +23,19 @@ var subreddit = '', limit = 30;
       if (parseInt($('#limit').val()) > 0) {
         limit = $('#limit').val();
       }
+      
       refresh();
+    });
+    
+    $('#nsfw').change(function(){
+      hideNSFW = $('#nsfw').val();
+      refresh();
+    });
+        
+    $('.showNSFW').live('click', function(e) {
+      e.preventDefault();
+      $(this).next().show();
+      $(this).hide();
     });
     
     refresh();
@@ -87,7 +99,13 @@ function loadImages(res) {
           } else {
             url = original_url + '.jpg';
           }
-       output += '<a href='+ url + ' target="_window"><img src="' + url + '" /></a>';
+          if (hideNSFW === 'true' && value.data.over_18 === true) {
+            output += '<a href="#" class="showNSFW">Show NSFW Image</a>';
+            var hiddenStyle = 'display:none;';
+          } else {
+            var hiddenStyle = '';
+          }
+       output += '<a href='+ url + ' target="_window" style="' + hiddenStyle + '"><img src="' + url + '" /></a>';
         output += '<p>source: <a target="_window" href="' + original_url + '">' + original_url + '</a> - <a target="_window" href="http://www.reddit.com' + value.data.permalink + '">Comment at Reddit</a></p></div>';
       $('#result').append(output);
     }
