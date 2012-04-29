@@ -1,13 +1,32 @@
 foo = '';
 result = '';
+var subreddit = '', limit = 30;
   $(function() {
-     if ($.urlParam('url').length > 3) {
-        base_url = $.urlParam('url');
-      } else {
-        base_url = '.json?limit=30&jsonp=loadImages'
+    $("a[href='options']").click(function(e) {
+      e.preventDefault();
+      $('#options').toggle();
+    });
+    
+    
+    $('#options-form').submit(function(e) {
+      e.preventDefault();
+      subreddit = $('#subreddit').val();
+      if (parseInt($('#limit').val()) > 0) {
+        limit = $('#limit').val();
       }
-      url = decodeURIComponent(base_url);
-      getImages(url);
+      refresh();
+    });
+    
+    $('#limit-form').submit(function(e) {
+      e.preventDefault();
+      subreddit = $('#subreddit').val();
+      if (parseInt($('#limit').val()) > 0) {
+        limit = $('#limit').val();
+      }
+      refresh();
+    });
+    
+    refresh();
        
        $('.more').click(function(e){
          e.preventDefault();
@@ -21,6 +40,18 @@ result = '';
         getImages(url);
        });
   });
+  
+  function refresh() {
+    if ($.urlParam('url').length > 3) {
+       base_url = $.urlParam('url');
+     } else if (subreddit != '') {
+       base_url = 'r/' + subreddit + '.json?limit=' + limit + '&jsonp=loadImages';
+     } else {
+       base_url = '.json?limit=' + limit + '&jsonp=loadImages'
+     }
+     url = decodeURIComponent(base_url);
+     getImages(url);
+  }
   
   function getImages(url) {
     $('#result').html('');
