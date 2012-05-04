@@ -53,14 +53,16 @@
       <label for='limit'>Number of Images (Max 100)</label>
       <input type='text' name='limit' id='limit' />
       <label for='nsfw'>NSFW Images Initially</label>
-      <select name='nsfw' id='nsfw'>
+      <select name='nsfw' id='hideNSFW'>
         <option value='true'>Hide</option>
         <option value='false'>Show</option>
       </select>  
       </form>
+      <button type="button" id='refresh'>Refresh</button>
+      <button type="reset">Reset</button>
     </div>
     <img class='ajax-loader' src='/images/ajax-loader.gif' alt='loading image' />
-    <div id='result'>
+    <div id='images'>
       
     </div>
     <h3>Legal</h3>
