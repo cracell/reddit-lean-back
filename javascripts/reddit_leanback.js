@@ -1,5 +1,42 @@
-foo = '';
-result = '';
+RedditLeanback = {};
+
+RedditLeanback.load = function() {
+  var baseURL,
+      urlPath = RedditLeanback.pathFromURL();
+  if (urlPath.length > 3) {
+     baseURL = $.urlParam('url');
+   } else if (subreddit != '') {
+     baseURL = 'r/' + subreddit + '.json?limit=' + limit + '&jsonp=loadImages';
+   } else {
+     baseURL = '.json?limit=' + limit + '&jsonp=loadImages'
+   }
+   var url = decodeURIComponent(baseURL);
+   RedditLeanback.requestJSON(url);  
+}
+
+RedditLeanback.requestJSON = function(url){
+  $.ajax({
+    url: 'http://www.reddit.com/' + url,
+    dataType: "jsonp",
+    type: 'GET',
+  }); 
+}
+
+RedditLeanback.refresh = function(){
+  document.getElementById('result').innerHtml = '';
+  RedditLeanback.load();
+}
+
+RedditLeanback.pathFromURL = function(){
+  var results = new RegExp('[\\?&]url=([^&#]*)').exec(window.location.href);
+  if (results) {
+    return results[1] || 0;
+  } else {
+    return 0;
+  }
+}
+
+
 var subreddit = '', limit = 30, hideNSFW = "true";
   $(function() {
     $("a[href='options']").click(function(e) {
@@ -14,7 +51,7 @@ var subreddit = '', limit = 30, hideNSFW = "true";
       if (parseInt($('#limit').val()) > 0) {
         limit = $('#limit').val();
       }
-      refresh();
+      RedditLeanback.load();
     });
     
     $('#limit-form').submit(function(e) {
@@ -24,12 +61,12 @@ var subreddit = '', limit = 30, hideNSFW = "true";
         limit = $('#limit').val();
       }
       
-      refresh();
+      RedditLeanback.load();
     });
     
     $('#nsfw').change(function(){
       hideNSFW = $('#nsfw').val();
-      refresh();
+      RedditLeanback.load();
     });
         
     $('.showNSFW').live('click', function(e) {
@@ -38,7 +75,7 @@ var subreddit = '', limit = 30, hideNSFW = "true";
       $(this).hide();
     });
     
-    refresh();
+    RedditLeanback.load();
        
        $('.more').click(function(e){
          e.preventDefault();
@@ -53,36 +90,12 @@ var subreddit = '', limit = 30, hideNSFW = "true";
        });
   });
   
-  function refresh() {
-    if ($.urlParam('url').length > 3) {
-       base_url = $.urlParam('url');
-     } else if (subreddit != '') {
-       base_url = 'r/' + subreddit + '.json?limit=' + limit + '&jsonp=loadImages';
-     } else {
-       base_url = '.json?limit=' + limit + '&jsonp=loadImages'
-     }
-     url = decodeURIComponent(base_url);
-     getImages(url);
-  }
+
   
-  function getImages(url) {
-    $('#result').html('');
-    $.ajax({
-      url: 'http://www.reddit.com/' + url,
-      dataType: "jsonp",
-      type: 'GET',
-    });
-  }
+
   
   // Used to check for Preview
-  $.urlParam = function(name){
-    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results) {
-      return results[1] || 0;
-    } else {
-      return 0;
-    }
-  }
+
   
 function loadImages(res) {
   result = res.data;
