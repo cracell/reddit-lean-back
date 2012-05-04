@@ -1,0 +1,7 @@
+= Reddit Leanback
+
+A JavaScript Library that displays Reddit Imgur links all in one easy to skim page using JSONP
+
+== Demo
+
+http://redditleanback.heroku.com/
