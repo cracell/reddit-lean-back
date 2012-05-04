@@ -4,4 +4,4 @@ A JavaScript Library that displays Reddit Imgur links all in one easy to skim pa
 
 == Demo
 
-http://redditleanback.heroku.com/
+http://redditleanback.heroku.com
