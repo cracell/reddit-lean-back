@@ -1,6 +1,7 @@
 RedditLeanback = {};
 
 RedditLeanback.load = function() {
+  if (supportsHtml5Storage) RedditLeanback.loadOptions();
   $('.ajax-loader').show();
   var baseURL,
       urlPath = RedditLeanback.pathFromURL(),
@@ -27,6 +28,7 @@ RedditLeanback.requestJSON = function(url){
 
 RedditLeanback.refresh = function(){
   $('#images').html('');
+  if (supportsHtml5Storage) RedditLeanback.setOptions();
   RedditLeanback.load();
 }
 
@@ -75,6 +77,30 @@ RedditLeanback.appendImgurImage = function(image) {
   output += '<a href='+ url + ' target="_window" style="' + hiddenStyle + '"><img src="' + url + '" /></a>';
   output += '<p>source: <a target="_window" href="' + original_url + '">' + original_url + '</a> - <a target="_window" href="http://www.reddit.com' + image.permalink + '">Comment at Reddit</a></p></div>';
   $('#images').append(output);
+}
+
+RedditLeanback.setOptions = function() {
+  if (document.getElementById('limit').value.length > 0) {
+    localStorage["limit"] = document.getElementById('limit').value;
+  }
+  if (document.getElementById('subreddit').value.length > 0) {
+    localStorage["subreddit"] = document.getElementById('subreddit').value;
+  }
+  localStorage["hideNSFW"] = document.getElementById('hideNSFW').value;
+}
+
+RedditLeanback.loadOptions = function() {
+  if (localStorage["limit"]) document.getElementById('limit').value = localStorage["limit"];
+  if (localStorage["subreddit"]) document.getElementById('subreddit').value = localStorage["subreddit"];
+  if (localStorage["hideNSFW"]) document.getElementById('hideNSFW').value = localStorage["hideNSFW"];
+}
+
+function supportsHtml5Storage() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
 }
 
 $(function() {

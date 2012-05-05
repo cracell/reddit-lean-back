@@ -1,6 +1,6 @@
 = Reddit Leanback
 
-A JavaScript Library that displays Reddit Imgur links all in one easy to skim page using JSONP
+A JavaScript Library that displays Reddit Imgur links all in one easy to skim page using JSONP. And it saves your settings via HTML5 Local Storage when available.
 
 == Demo
 
